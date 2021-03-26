@@ -72,7 +72,7 @@ class Task(id: String, resources: Resources, context: Context?) {
             for (field in drawablesFields) {
                 if (field.name.startsWith(DRAWABLE_PREFIX)) {
                     getDrawable(field, resources, context)?.let {
-                        variantsList.add(Variant(it, true))
+                        variantsList.add(Variant(it, false))
                     }
                 }
 

@@ -35,11 +35,19 @@
                 app:destination="@id/resultScreenFragment">
             <argument android:name="result" android:defaultValue="0"/>
         </action>
+        <argument android:name="isAnswers" app:argType="boolean" android:defaultValue="false"/>
+        <action android:id="@+id/action_TaskViewerFragment_to_finalFragment" app:destination="@id/finalFragment"/>
     </fragment>
 
     <fragment android:id="@+id/resultScreenFragment" android:name="com.example.iqapp.ResultScreenFragment"
               android:label="ResultScreenFragment">
-        <argument android:name="result" app:argType="integer" android:defaultValue="42"/>
+        <action android:id="@+id/action_resultScreenFragment_to_finalFragment" app:destination="@id/finalFragment"/>
+    </fragment>
+    <fragment android:id="@+id/finalFragment" android:name="com.example.iqapp.FinalFragment"
+              android:label="fragment_final" tools:layout="@layout/fragment_final">
+        <action android:id="@+id/action_finalFragment_to_startScreenFragment"
+                app:destination="@id/startScreenFragment"/>
+        <action android:id="@+id/action_finalFragment_to_TaskViewerFragment" app:destination="@id/TaskViewerFragment"/>
     </fragment>
 
 

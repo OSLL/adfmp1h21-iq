@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.iqapp.entities.AppState
 
 class ResultScreenFragment: Fragment() {
-
-    private var result = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,11 +24,12 @@ class ResultScreenFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getInt("result")?.let {
-            result = it
-        }
 
-        view.findViewById<TextView>(R.id.textView2).text = getString(R.string.resultView, result)
+        view.findViewById<TextView>(R.id.textView2).text = getString(R.string.resultView, AppState.calculateResult())
+
+        view.findViewById<Button>(R.id.button_finish).setOnClickListener {
+            findNavController().navigate(R.id.action_resultScreenFragment_to_finalFragment)
+        }
     }
 
 }

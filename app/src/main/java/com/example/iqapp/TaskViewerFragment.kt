@@ -9,13 +9,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.iqapp.entities.Task
 import android.view.MotionEvent
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 
-import android.view.View.OnTouchListener
+import com.example.iqapp.entities.AppState
+import com.example.iqapp.entities.AppState.maxTasks
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -24,12 +25,8 @@ class TaskViewerFragment : Fragment() {
     private val variantsViews = mutableListOf<ImageView>()
     private val questionsViews = mutableListOf<ImageView>()
 
-    private val tasks = mutableListOf<Task>()
-
-    private val maxTasks = 5
     private var currTask = 0
-
-    private val chosenAnswers = IntArray(maxTasks) { -1 }
+    private var isAnswers = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,63 +38,135 @@ class TaskViewerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadTasks()
+
+        isAnswers = arguments?.getBoolean("isAnswers") ?: false
+
+        if (!isAnswers) {
+            AppState.loadTasks(resources, context)
+        }
+
         initImageView()
-        updateTask()
+
 
         val taskNum = view.findViewById<TextView>(R.id.taskNum)
-        taskNum.text = "${currTask + 1}/${maxTasks}"
+        taskNum.text = progressString()
+
+        val buttonPrevious = view.findViewById<Button>(R.id.button_previous)
+        if (isAnswers && currTask == 0) {
+            buttonPrevious.visibility = View.INVISIBLE
+        }
 
         val buttonNext = view.findViewById<Button>(R.id.button_next)
 
-        view.findViewById<Button>(R.id.button_previous).setOnClickListener {
-            saveAnswer()
-            if (currTask != 0) {
-                currTask--
-                taskNum.text = "${currTask + 1}/${maxTasks}"
-                updateTask()
-                buttonNext.text = "NEXT"
-            } else {
-                findNavController().navigate(R.id.action_TaskViewerFragment_to_TutorialFragment)
-            }
-
-        }
-
-
-        buttonNext.setOnClickListener {
-            saveAnswer()
-            if (currTask != maxTasks - 1) {
-                currTask++
-                taskNum.text = "${currTask + 1}/${maxTasks}"
-
-                updateTask()
-
-                if (currTask == maxTasks - 1) {
-                    buttonNext.text = "RESULT"
+        if (!isAnswers) {
+            buttonPrevious.setOnClickListener {
+                saveAnswer()
+                if (currTask != 0) {
+                    currTask--
+                    taskNum.text = progressString()
+                    updateTask()
+                    buttonNext.text = "NEXT"
+                } else {
+                    findNavController().navigate(R.id.action_TaskViewerFragment_to_TutorialFragment)
                 }
 
-            } else {
-                val bundle = bundleOf("result" to calculateResult())
-                findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment, bundle)
             }
+
+            buttonNext.setOnClickListener {
+                saveAnswer()
+                if (currTask != maxTasks - 1) {
+                    currTask++
+                    taskNum.text = progressString()
+
+                    updateTask()
+
+                    if (currTask == maxTasks - 1) {
+                        buttonNext.text = "RESULT"
+                    }
+
+                } else {
+                        findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment)
+                }
+            }
+        } else {
+            buttonPrevious.setOnClickListener {
+                if (currTask != 0) {
+                    currTask--
+                    taskNum.text = progressString()
+                    updateTask()
+                    buttonNext.text = "NEXT"
+
+                    if (currTask == 0) {
+                        buttonPrevious.visibility = View.INVISIBLE
+                    }
+                }
+            }
+
+            buttonNext.setOnClickListener {
+                val lastIdx = maxTasks - 1
+
+                if (currTask != lastIdx) {
+                    currTask++
+                    taskNum.text = progressString()
+
+                    updateTask()
+
+                    if (currTask == lastIdx) {
+                        buttonNext.text = "FINAL"
+                    }
+
+                    buttonPrevious.visibility = View.VISIBLE
+
+                } else {
+                    findNavController().navigate(R.id.action_TaskViewerFragment_to_finalFragment)
+                }
+            }
+
+
         }
+        updateTask()
+
 
     }
 
+    private fun progressString(): String {
+        return "${currTask + 1}/${maxTasks}"
+    }
+
     private fun updateTask() {
-        for ((variantView, variant) in variantsViews.zip(tasks[currTask].variants)) {
+        for ((variantView, variant) in variantsViews.zip(AppState.tasks[currTask].variants)) {
             variantView.setImageDrawable(variant.drawable)
-            variantView.setBackgroundColor(Color.RED);
         }
 
-        for ((questionView, question) in questionsViews.zip(tasks[currTask].questions)) {
+        for ((questionView, question) in questionsViews.zip(AppState.tasks[currTask].questions)) {
             questionView.setImageDrawable(question.drawable)
         }
 
-        val answer = chosenAnswers[currTask]
-        if (answer != -1) {
-            variantsViews[answer].isSelected = true
+        if (!isAnswers) {
+            val answer = AppState.chosenAnswers[currTask]
+            if (answer != -1) {
+                variantsViews[answer].isSelected = true
+            }
+        } else {
+            var realAnswer = -1
+            for ((i, viewToVariant) in variantsViews.zip(AppState.tasks[currTask].variants).withIndex()) {
+                val (variantView, variant) = viewToVariant
+                variantView.setBackgroundColor(Color.TRANSPARENT)
+                variantView.isPressed = false
+
+                if (variant.isAnswer) {
+                    variantView.setBackgroundColor(Color.GREEN)
+                    realAnswer = i
+                }
+            }
+
+            val answer = AppState.chosenAnswers[currTask]
+            if (answer != realAnswer && answer != -1) {
+                variantsViews[answer].setBackgroundColor(Color.RED)
+            }
+
         }
+
 
     }
 
@@ -134,33 +203,13 @@ class TaskViewerFragment : Fragment() {
         }
     }
 
-    private fun loadTasks() {
-        val taskIds = Task.availableTaskIds()
-        taskIds.shuffle()
-        val chosenTasks = taskIds.take(maxTasks)
-
-        for (taskId in chosenTasks) {
-            tasks.add(Task(taskId, resources, context))
-        }
-    }
-
     private fun saveAnswer() {
         for ((i, variantView) in variantsViews.withIndex()) {
             if (variantView.isSelected) {
                 variantView.isSelected = false
-                chosenAnswers[currTask] = i
+                AppState.chosenAnswers[currTask] = i
             }
         }
-    }
-
-    private fun calculateResult(): Int {
-        var result = 0
-        for ((i, task) in tasks.withIndex()) {
-            if (task.answerIdx == chosenAnswers[i]) {
-                result += 1
-            }
-        }
-        return result
     }
 
 }

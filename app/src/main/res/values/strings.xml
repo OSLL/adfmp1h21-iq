@@ -23,4 +23,8 @@
     <string name="resultView">Passed tasks: %d\n Wow. You’re special!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_rate">RATE</string>
+    <string name="button_share">SHARE</string>
+    <string name="button_answers">ANSWERS</string>
+    <string name="button_home">HOME</string>
 </resources>
