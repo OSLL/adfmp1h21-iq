@@ -5,8 +5,22 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="continue_to_tasks">Continue</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="tutorial_text">
+        You have 40 mintes to answer 60 questions.\n
+        Remember it is accurate work that counts. Attempt each problem in turn.\n
+        Do your best to find the cirrect oiece to complete it before going on to the next problem.
+        If you get stuck move on and come back to the problem later.
+        But remember, in every case, the next problem is harder and it will take you longer to check your answer
+        carefully.
+    </string>
+    <string name="start">Start</string>
+    <string name="button_go_to_end">Finish</string>
+    <string name="resultView">Passed tasks: %d\n Wow. You’re special!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

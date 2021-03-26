@@ -3,26 +3,44 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/FirstFragment">
+            app:startDestination="@id/startScreenFragment">
 
-    <fragment
-            android:id="@+id/FirstFragment"
-            android:name="com.example.iqapp.FirstFragment"
-            android:label="@string/first_fragment_label"
-            tools:layout="@layout/fragment_first">
-
-        <action
-                android:id="@+id/action_FirstFragment_to_SecondFragment"
-                app:destination="@id/SecondFragment"/>
+    <fragment android:id="@+id/startScreenFragment" android:name="com.example.iqapp.StartScreenFragment"
+              android:label="StartScreenFragment">
+        <action android:id="@+id/action_startScreenFragment_to_TutorialFragment"
+                app:destination="@id/TutorialFragment"/>
     </fragment>
+
     <fragment
-            android:id="@+id/SecondFragment"
-            android:name="com.example.iqapp.SecondFragment"
+            android:id="@+id/TutorialFragment"
+            android:name="com.example.iqapp.TutorialFragment"
             android:label="@string/second_fragment_label"
-            tools:layout="@layout/fragment_second">
+            tools:layout="@layout/tutorial_fragment">
 
         <action
-                android:id="@+id/action_SecondFragment_to_FirstFragment"
-                app:destination="@id/FirstFragment"/>
+                android:id="@+id/action_TutorialFragment_to_TaskViewerFragment"
+                app:destination="@id/TaskViewerFragment"/>
     </fragment>
+
+    <fragment
+            android:id="@+id/TaskViewerFragment"
+            android:name="com.example.iqapp.TaskViewerFragment"
+            android:label="@string/first_fragment_label"
+            tools:layout="@layout/task_viewer_fragment">
+
+        <action
+                android:id="@+id/action_TaskViewerFragment_to_TutorialFragment"
+                app:destination="@id/TutorialFragment"/>
+        <action android:id="@+id/action_TaskViewerFragment_to_resultScreenFragment"
+                app:destination="@id/resultScreenFragment">
+            <argument android:name="result" android:defaultValue="0"/>
+        </action>
+    </fragment>
+
+    <fragment android:id="@+id/resultScreenFragment" android:name="com.example.iqapp.ResultScreenFragment"
+              android:label="ResultScreenFragment">
+        <argument android:name="result" app:argType="integer" android:defaultValue="42"/>
+    </fragment>
+
+
 </navigation>
