@@ -98,7 +98,7 @@
     <TextView
             android:text="00:00"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/leftTime"
+            android:layout_height="wrap_content" android:id="@+id/text_view_time_left"
             app:layout_constraintEnd_toStartOf="@+id/button_next"
             app:layout_constraintStart_toEndOf="@+id/button_previous"
             app:layout_constraintTop_toBottomOf="@+id/taskNum" app:layout_constraintBottom_toBottomOf="parent"

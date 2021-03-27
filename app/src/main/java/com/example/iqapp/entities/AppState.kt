@@ -6,6 +6,7 @@ import android.content.res.Resources
 object AppState {
 
     const val maxTasks = 5
+    const val timeMinutes: Long = 5
     val tasks = mutableListOf<Task>()
     var chosenAnswers = IntArray(maxTasks) { -1 }
 

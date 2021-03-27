@@ -3,6 +3,7 @@ package com.example.iqapp
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,6 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.iqapp.entities.AppState
 import com.example.iqapp.entities.AppState.maxTasks
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 class TaskViewerFragment : Fragment() {
 
@@ -33,7 +39,6 @@ class TaskViewerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.task_viewer_fragment, container, false)
     }
 
@@ -50,10 +55,30 @@ class TaskViewerFragment : Fragment() {
         val buttonNext = view.findViewById<Button>(R.id.button_next)
         val buttonAnswer = view.findViewById<Button>(R.id.button_show_answer)
         buttonAnswer.visibility = View.INVISIBLE
+        buttonPrevious.visibility = View.INVISIBLE
 
+        var countDownTimer: CountDownTimer? = null
         when {
             isTest() || isTrain() -> {
                 AppState.loadTasks(resources, context)
+
+                if (isTest()) {
+                    countDownTimer = object :
+                        CountDownTimer(TimeUnit.MINUTES.toMillis(AppState.timeMinutes), TimeUnit.SECONDS.toMillis(1)) {
+                        override fun onFinish() {
+                            saveAnswer()
+                            findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment)
+                        }
+
+                        override fun onTick(p0: Long) {
+                            val date = Date(p0)
+                            val formatter: DateFormat = SimpleDateFormat("mm:ss")
+                            formatter.timeZone = TimeZone.getTimeZone("UTC")
+                            val dateFormatted: String = formatter.format(date)
+                            view.findViewById<TextView>(R.id.text_view_time_left).text = dateFormatted
+                        }
+                    }
+                }
 
 
                 buttonPrevious.setOnClickListener {
@@ -63,15 +88,7 @@ class TaskViewerFragment : Fragment() {
                         buttonAnswer.visibility = View.VISIBLE
                     }
 
-                    if (currTask != 0) {
-                        currTask--
-                        taskNum.text = progressString()
-                        updateTask()
-                        buttonNext.text = "NEXT"
-                    } else {
-                        findNavController().navigate(R.id.action_TaskViewerFragment_to_TutorialFragment)
-                    }
-
+                    decrementTask(buttonPrevious, buttonNext, taskNum)
                 }
 
                 buttonNext.setOnClickListener {
@@ -81,19 +98,10 @@ class TaskViewerFragment : Fragment() {
                         buttonAnswer.visibility = View.VISIBLE
                     }
 
-                    if (currTask != maxTasks - 1) {
-                        currTask++
-                        taskNum.text = progressString()
-
-                        updateTask()
-
-                        if (currTask == maxTasks - 1) {
-                            buttonNext.text = "RESULT"
-                        }
-
-                    } else {
-                        findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment)
-                    }
+                    incrementTask(
+                        buttonPrevious, buttonNext, taskNum,
+                        "RESULT", R.id.action_TaskViewerFragment_to_resultScreenFragment
+                    )
                 }
 
                 if (isTrain()) {
@@ -104,54 +112,72 @@ class TaskViewerFragment : Fragment() {
                         buttonAnswer.visibility = View.INVISIBLE
                     }
 
-                    val timer = view.findViewById<TextView>(R.id.leftTime)
+                    val timer = view.findViewById<TextView>(R.id.text_view_time_left)
                     timer.visibility = View.INVISIBLE
                 }
             }
 
             isAnswer() -> {
-                buttonPrevious.visibility = View.INVISIBLE
-                val timer = view.findViewById<TextView>(R.id.leftTime)
+
+                val timer = view.findViewById<TextView>(R.id.text_view_time_left)
                 timer.visibility = View.INVISIBLE
 
                 buttonPrevious.setOnClickListener {
-                    if (currTask != 0) {
-                        currTask--
-                        taskNum.text = progressString()
-                        updateTask()
-                        buttonNext.text = "NEXT"
-
-                        if (currTask == 0) {
-                            buttonPrevious.visibility = View.INVISIBLE
-                        }
-                    }
+                    decrementTask(buttonPrevious, buttonNext, taskNum)
                 }
 
                 buttonNext.setOnClickListener {
-                    val lastIdx = maxTasks - 1
-
-                    if (currTask != lastIdx) {
-                        currTask++
-                        taskNum.text = progressString()
-
-                        updateTask()
-
-                        if (currTask == lastIdx) {
-                            buttonNext.text = "FINAL"
-                        }
-
-                        buttonPrevious.visibility = View.VISIBLE
-
-                    } else {
-                        findNavController().navigate(R.id.action_TaskViewerFragment_to_finalFragment)
-                    }
+                    incrementTask(
+                        buttonPrevious, buttonNext, taskNum,
+                        "FINAL", R.id.action_TaskViewerFragment_to_finalFragment
+                    )
                 }
             }
         }
 
         updateTask()
 
+        countDownTimer?.start()
 
+    }
+
+    private fun decrementTask(buttonPrevious: Button, buttonNext: Button, taskNum: TextView) {
+        if (currTask != 0) {
+            currTask--
+            taskNum.text = progressString()
+            updateTask()
+            buttonNext.text = "NEXT"
+
+            if (currTask == 0) {
+                buttonPrevious.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun incrementTask(
+        buttonPrevious: Button,
+        buttonNext: Button,
+        taskNum: TextView,
+        lastNextName: String,
+        actionNavigate: Int
+    ) {
+        val lastIdx = maxTasks - 1
+
+        if (currTask != lastIdx) {
+            currTask++
+            taskNum.text = progressString()
+
+            updateTask()
+
+            if (currTask == lastIdx) {
+                buttonNext.text = lastNextName
+            }
+
+            buttonPrevious.visibility = View.VISIBLE
+
+        } else {
+            findNavController().navigate(actionNavigate)
+        }
     }
 
     private fun progressString(): String {
@@ -251,16 +277,10 @@ class TaskViewerFragment : Fragment() {
         }
     }
 
-    private fun isAnswer(): Boolean {
-        return type == Type.ANSWER.value
-    }
+    private fun isAnswer(): Boolean = type == Type.ANSWER.value
 
-    private fun isTrain(): Boolean {
-        return type == Type.TRAIN.value
-    }
+    private fun isTrain(): Boolean = type == Type.TRAIN.value
 
-    private fun isTest(): Boolean {
-        return type == Type.TEST.value
-    }
+    private fun isTest(): Boolean = type == Type.TEST.value
 
 }
