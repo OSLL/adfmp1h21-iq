@@ -15,9 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.iqapp.entities.AppState
 import com.example.iqapp.entities.AppState.maxTasks
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class TaskViewerFragment : Fragment() {
 
     enum class Type(val value: Int) {
@@ -38,18 +35,6 @@ class TaskViewerFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.task_viewer_fragment, container, false)
-    }
-
-    private fun isAnswer(): Boolean {
-        return type == Type.ANSWER.value
-    }
-
-    private fun isTrain(): Boolean {
-        return type == Type.TRAIN.value
-    }
-
-    private fun isTest(): Boolean {
-        return type == Type.TEST.value
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,6 +60,7 @@ class TaskViewerFragment : Fragment() {
                     saveAnswer()
                     if (isTrain()) {
                         setDefaultSelector()
+                        buttonAnswer.visibility = View.VISIBLE
                     }
 
                     if (currTask != 0) {
@@ -92,6 +78,7 @@ class TaskViewerFragment : Fragment() {
                     saveAnswer()
                     if (isTrain()) {
                         setDefaultSelector()
+                        buttonAnswer.visibility = View.VISIBLE
                     }
 
                     if (currTask != maxTasks - 1) {
@@ -114,6 +101,7 @@ class TaskViewerFragment : Fragment() {
 
                     buttonAnswer.setOnClickListener {
                         showAnswer()
+                        buttonAnswer.visibility = View.INVISIBLE
                     }
 
                     val timer = view.findViewById<TextView>(R.id.leftTime)
@@ -123,6 +111,8 @@ class TaskViewerFragment : Fragment() {
 
             isAnswer() -> {
                 buttonPrevious.visibility = View.INVISIBLE
+                val timer = view.findViewById<TextView>(R.id.leftTime)
+                timer.visibility = View.INVISIBLE
 
                 buttonPrevious.setOnClickListener {
                     if (currTask != 0) {
@@ -259,6 +249,18 @@ class TaskViewerFragment : Fragment() {
         for (variantView in variantsViews) {
             variantView.background = resources.getDrawable(R.drawable.answer_selector, context?.theme)
         }
+    }
+
+    private fun isAnswer(): Boolean {
+        return type == Type.ANSWER.value
+    }
+
+    private fun isTrain(): Boolean {
+        return type == Type.TRAIN.value
+    }
+
+    private fun isTest(): Boolean {
+        return type == Type.TEST.value
     }
 
 }

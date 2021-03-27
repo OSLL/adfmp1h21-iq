@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Build
 import com.example.iqapp.R
-import java.lang.Exception
 import java.lang.reflect.Field
 
 class Task(id: String, resources: Resources, context: Context?) {
@@ -31,11 +30,11 @@ class Task(id: String, resources: Resources, context: Context?) {
         }
     }
 
-    val variants : List<Variant>
-    val questions : List<Question>
+    val variants: List<Variant>
+    val questions: List<Question>
 
-    var answerIdx : Int = -1
-    private set
+    var answerIdx: Int = -1
+        private set
 
     data class Variant(val drawable: Drawable, val isAnswer: Boolean)
     data class Question(val drawable: Drawable, val name: String)
@@ -48,22 +47,22 @@ class Task(id: String, resources: Resources, context: Context?) {
         val questionsList = mutableListOf<Question>()
 
         for (field in drawablesFields) {
-                if (field.name.startsWith("$DRAWABLE_PREFIX$id")) {
-                    when {
-                        field.name.endsWith(VARIANT_END) -> getDrawable(field, resources, context)?.let {
-                            variantsList.add(Variant(it, false))
-                        }
+            if (field.name.startsWith("$DRAWABLE_PREFIX$id")) {
+                when {
+                    field.name.endsWith(VARIANT_END) -> getDrawable(field, resources, context)?.let {
+                        variantsList.add(Variant(it, false))
+                    }
 
-                        field.name.endsWith(ANSWER_END) -> getDrawable(field, resources, context)?.let {
-                            variantsList.add(Variant(it, true))
-                            answerIdx = variantsList.size - 1
-                        }
+                    field.name.endsWith(ANSWER_END) -> getDrawable(field, resources, context)?.let {
+                        variantsList.add(Variant(it, true))
+                        answerIdx = variantsList.size - 1
+                    }
 
-                        field.name.endsWith(QUESTION_END) -> getDrawable(field, resources, context)?.let {
-                            questionsList.add(Question(it, field.name))
-                        }
+                    field.name.endsWith(QUESTION_END) -> getDrawable(field, resources, context)?.let {
+                        questionsList.add(Question(it, field.name))
                     }
                 }
+            }
         }
 
         questionsList.sortBy { it.name }

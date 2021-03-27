@@ -32,4 +32,6 @@
     <string name="button_home">HOME</string>
     <string name="ANSWER">ANSWER</string>
     <string name="button_train">TRAIN</string>
+    <string name="action_rate">Rate</string>
+    <string name="action_share">Share</string>
 </resources>

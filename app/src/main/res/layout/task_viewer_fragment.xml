@@ -42,13 +42,13 @@
             <ImageView
                     android:layout_width="102dp"
                     android:layout_height="101dp"
-                    tools:src="@tools:sample/avatars"
+                    tools:src="@drawable/question"
                     android:id="@+id/variantView1"
                     android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
             <ImageView
-                    android:src="@drawable/d_creeper"
+                    android:src="@drawable/question"
                     android:layout_width="102dp"
                     android:layout_height="102dp" android:id="@+id/variantView2"
                     android:padding="10sp"
@@ -57,7 +57,9 @@
 
             <ImageView
                     android:layout_width="102dp"
-                    android:layout_height="102dp" tools:src="@tools:sample/avatars" android:id="@+id/variantView3"
+                    android:layout_height="102dp"
+                    android:src="@drawable/question"
+                    android:id="@+id/variantView3"
                     android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
@@ -65,19 +67,22 @@
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
                     android:layout_width="102dp"
-                    android:layout_height="102dp" tools:src="@tools:sample/avatars" android:id="@+id/variantView4"
+                    android:layout_height="102dp"
+                    android:src="@drawable/question" android:id="@+id/variantView4"
                     tools:layout_editor_absoluteY="353dp" tools:layout_editor_absoluteX="293dp" android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
             <ImageView
                     android:layout_width="102dp"
-                    android:layout_height="102dp" tools:src="@tools:sample/avatars" android:id="@+id/variantView5"
+                    android:layout_height="102dp"
+                    android:src="@drawable/question" android:id="@+id/variantView5"
                     tools:layout_editor_absoluteY="348dp" android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
             <ImageView
                     android:layout_width="102dp"
-                    android:layout_height="102dp" tools:src="@tools:sample/avatars" android:id="@+id/variantView6"
+                    android:layout_height="102dp"
+                    android:src="@drawable/question" android:id="@+id/variantView6"
                     android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
@@ -106,22 +111,22 @@
 
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
-                    android:src="@drawable/d_creeper"
+                    android:src="@drawable/question"
                     android:layout_width="102dp"
                     android:layout_height="102dp" android:id="@+id/questionView1" android:padding="10sp"
                     android:contentDescription="TODO"/>
             <ImageView
-                    android:src="@drawable/d_creeper"
+                    android:src="@drawable/question"
                     android:layout_width="102dp"
                     android:layout_height="102dp" android:id="@+id/questionView2" android:padding="10sp"/>
         </TableRow>
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
-                    android:src="@drawable/d_creeper"
+                    android:src="@drawable/question"
                     android:layout_width="102dp"
                     android:layout_height="102dp" android:id="@+id/questionView3" android:padding="10sp"/>
             <ImageView
-                    android:src="@drawable/d_creeper"
+                    android:src="@drawable/question"
                     android:layout_width="102dp"
                     android:layout_height="102dp" android:id="@+id/questionView4" android:padding="10sp"/>
         </TableRow>
