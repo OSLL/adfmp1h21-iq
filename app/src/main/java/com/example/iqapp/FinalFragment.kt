@@ -28,7 +28,7 @@ class FinalFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.button_answers).setOnClickListener {
-            val bundle = bundleOf("isAnswers" to true)
+            val bundle = bundleOf("type" to TaskViewerFragment.Type.ANSWER.value)
             findNavController().navigate(R.id.action_finalFragment_to_TaskViewerFragment, bundle)
         }
     }

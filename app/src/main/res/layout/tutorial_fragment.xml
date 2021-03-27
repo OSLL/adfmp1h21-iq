@@ -15,12 +15,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_tutorial" app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintVertical_bias="0.789"/>
     <TextView
-            android:text="@string/tutorial_text"
+            android:text="@string/tutorial_test"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textView"
+            android:layout_height="wrap_content" android:id="@+id/text_view_tutorial"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="120dp" app:layout_constraintHorizontal_bias="0.0" android:textSize="18sp"

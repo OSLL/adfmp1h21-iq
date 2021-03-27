@@ -33,8 +33,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/button_next"
-            android:layout_marginBottom="16dp" android:id="@+id/tableLayout">
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/tableLayout"
+            app:layout_constraintBottom_toTopOf="@+id/button_show_answer"
+            android:layout_marginBottom="16dp">
 
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
@@ -124,4 +126,11 @@
                     android:layout_height="102dp" android:id="@+id/questionView4" android:padding="10sp"/>
         </TableRow>
     </TableLayout>
+    <Button
+            android:text="@string/ANSWER"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/button_show_answer"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498" android:layout_marginBottom="17dp"
+            app:layout_constraintBottom_toTopOf="@+id/taskNum"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,13 +10,16 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="tutorial_text">
-        You have 40 mintes to answer 60 questions.\n
+    <string name="tutorial_test">
+        You have 5 minutes to answer 5 questions.\n
         Remember it is accurate work that counts. Attempt each problem in turn.\n
-        Do your best to find the cirrect oiece to complete it before going on to the next problem.
+        Do your best to find the correct piece to complete it before going on to the next problem.
         If you get stuck move on and come back to the problem later.
         But remember, in every case, the next problem is harder and it will take you longer to check your answer
         carefully.
+    </string>
+    <string name="tutorial_train">
+        In Train mode you haven\'t time restrictions and you can see the result by using ANSWER button.
     </string>
     <string name="start">Start</string>
     <string name="button_go_to_end">Finish</string>
@@ -27,4 +30,6 @@
     <string name="button_share">SHARE</string>
     <string name="button_answers">ANSWERS</string>
     <string name="button_home">HOME</string>
+    <string name="ANSWER">ANSWER</string>
+    <string name="button_train">TRAIN</string>
 </resources>

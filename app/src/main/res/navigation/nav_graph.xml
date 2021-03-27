@@ -20,6 +20,7 @@
         <action
                 android:id="@+id/action_TutorialFragment_to_TaskViewerFragment"
                 app:destination="@id/TaskViewerFragment"/>
+        <argument android:name="type" app:argType="integer" android:defaultValue="1"/>
     </fragment>
 
     <fragment
@@ -35,7 +36,7 @@
                 app:destination="@id/resultScreenFragment">
             <argument android:name="result" android:defaultValue="0"/>
         </action>
-        <argument android:name="isAnswers" app:argType="boolean" android:defaultValue="false"/>
+        <argument android:name="type" app:argType="integer" android:defaultValue="1"/>
         <action android:id="@+id/action_TaskViewerFragment_to_finalFragment" app:destination="@id/finalFragment"/>
     </fragment>
 

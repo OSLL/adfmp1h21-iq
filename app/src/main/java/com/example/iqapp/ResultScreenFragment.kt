@@ -25,7 +25,7 @@ class ResultScreenFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<TextView>(R.id.textView2).text = getString(R.string.resultView, AppState.calculateResult())
+        view.findViewById<TextView>(R.id.text_view_result).text = getString(R.string.resultView, AppState.calculateResult())
 
         view.findViewById<Button>(R.id.button_finish).setOnClickListener {
             findNavController().navigate(R.id.action_resultScreenFragment_to_finalFragment)
