@@ -2,12 +2,11 @@ package com.example.iqapp.entities
 
 import android.content.Context
 import android.content.res.Resources
-import kotlin.math.max
 import kotlin.properties.Delegates
 
 object AppState {
 
-    private var maxTasks by Delegates.notNull<Int>()
+    private var numOfTasks by Delegates.notNull<Int>()
 
     private val _tasks = mutableListOf<Task>()
     val tasks: List<Task>
@@ -32,10 +31,10 @@ object AppState {
             _tasks.add(Task(taskId, resources, context))
         }
 
-        maxTasks = numOfTasks
+        this.numOfTasks = numOfTasks
     }
 
-    fun calculateResult(): Int {
+    fun passedTasks(): Int {
         var result = 0
         for ((i, task) in _tasks.withIndex()) {
             if (task.answerIdx == chosenAnswers[i]) {
@@ -44,4 +43,6 @@ object AppState {
         }
         return result
     }
+
+    fun result(): Double = passedTasks().toDouble() / numOfTasks
 }

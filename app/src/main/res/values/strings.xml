@@ -22,7 +22,10 @@
     </string>
     <string name="start">Start</string>
     <string name="button_go_to_end">Finish</string>
-    <string name="resultView">Passed tasks: %d\n Wow. You’re special!</string>
+    <string name="resultView1">Passed tasks: %d\n Wow. You’re special!</string>
+    <string name="resultView2">Passed tasks: %d\n It\'s good!</string>
+    <string name="resultView3">Passed tasks: %d\n You can do better!</string>
+    <string name="resultView4">Passed tasks: %d\n Don\'t worry! Train more!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_rate">RATE</string>
