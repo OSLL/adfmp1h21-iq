@@ -38,6 +38,8 @@
         </action>
         <argument android:name="type" app:argType="integer" android:defaultValue="1"/>
         <action android:id="@+id/action_TaskViewerFragment_to_finalFragment" app:destination="@id/finalFragment"/>
+        <argument android:name="numOfTasks" app:argType="integer" android:defaultValue="5"/>
+        <argument android:name="difficulty" app:argType="integer" android:defaultValue="1"/>
     </fragment>
 
     <fragment android:id="@+id/resultScreenFragment" android:name="com.example.iqapp.ResultScreenFragment"

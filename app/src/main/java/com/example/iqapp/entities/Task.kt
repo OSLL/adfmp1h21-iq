@@ -16,8 +16,8 @@ class Task(id: String, resources: Resources, context: Context?) {
         const val QUESTION_END = "question"
         const val DRAWABLE_PREFIX = "d_"
 
-        fun availableTaskIds(): MutableList<String> {
-            val ids = mutableListOf<String>()
+        fun availableTaskIds(): Set<String> {
+            val ids = mutableSetOf<String>()
 
             val drawablesFields = R.drawable::class.java.fields
             for (field in drawablesFields) {
@@ -38,7 +38,6 @@ class Task(id: String, resources: Resources, context: Context?) {
 
     data class Variant(val drawable: Drawable, val isAnswer: Boolean)
     data class Question(val drawable: Drawable, val name: String)
-
 
     init {
         val drawablesFields = R.drawable::class.java.fields

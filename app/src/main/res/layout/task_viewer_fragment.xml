@@ -23,12 +23,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="36dp" android:layout_marginLeft="24dp" android:layout_marginStart="24dp"/>
-    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                                android:id="@+id/guideline2"
-                                                android:orientation="vertical"
-                                                app:layout_constraintGuide_percent="0.0"/>
-    <androidx.constraintlayout.widget.Barrier android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                              android:id="@+id/barrier2" app:barrierDirection="top"/>
+    <Button
+            android:text="@string/ANSWER"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/button_show_answer"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498" android:layout_marginBottom="17dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_task_num"/>
+
+    <TextView
+            android:text="1/60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/text_view_task_num"
+            app:layout_constraintEnd_toStartOf="@+id/button_next"
+            app:layout_constraintStart_toEndOf="@+id/button_previous" app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="48dp"/>
+    <TextView
+            android:text="00:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/text_view_time_left"
+            app:layout_constraintEnd_toStartOf="@+id/button_next"
+            app:layout_constraintStart_toEndOf="@+id/button_previous"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_task_num" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.493" app:layout_constraintVertical_bias="0.484"/>
+
     <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,8 +58,8 @@
 
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
-                    android:layout_width="102dp"
-                    android:layout_height="101dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     tools:src="@drawable/question"
                     android:id="@+id/variantView1"
                     android:padding="10sp"
@@ -49,15 +67,15 @@
             />
             <ImageView
                     android:src="@drawable/question"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp" android:id="@+id/variantView2"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp" android:id="@+id/variantView2"
                     android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
 
             <ImageView
-                    android:layout_width="102dp"
-                    android:layout_height="102dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:src="@drawable/question"
                     android:id="@+id/variantView3"
                     android:padding="10sp"
@@ -66,43 +84,29 @@
         </TableRow>
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
-                    android:layout_width="102dp"
-                    android:layout_height="102dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:src="@drawable/question" android:id="@+id/variantView4"
                     tools:layout_editor_absoluteY="353dp" tools:layout_editor_absoluteX="293dp" android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
             <ImageView
-                    android:layout_width="102dp"
-                    android:layout_height="102dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:src="@drawable/question" android:id="@+id/variantView5"
                     tools:layout_editor_absoluteY="348dp" android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
             <ImageView
-                    android:layout_width="102dp"
-                    android:layout_height="102dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:src="@drawable/question" android:id="@+id/variantView6"
                     android:padding="10sp"
                     android:background="@drawable/answer_selector"
             />
         </TableRow>
     </TableLayout>
-    <TextView
-            android:text="1/60"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/taskNum"
-            app:layout_constraintEnd_toStartOf="@+id/button_next"
-            app:layout_constraintStart_toEndOf="@+id/button_previous" app:layout_constraintHorizontal_bias="0.49"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="48dp"/>
-    <TextView
-            android:text="00:00"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/text_view_time_left"
-            app:layout_constraintEnd_toStartOf="@+id/button_next"
-            app:layout_constraintStart_toEndOf="@+id/button_previous"
-            app:layout_constraintTop_toBottomOf="@+id/taskNum" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.493" app:layout_constraintVertical_bias="0.484"/>
+
     <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,30 +116,23 @@
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
                     android:src="@drawable/question"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp" android:id="@+id/questionView1" android:padding="10sp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp" android:id="@+id/questionView1" android:padding="10sp"
                     android:contentDescription="TODO"/>
             <ImageView
                     android:src="@drawable/question"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp" android:id="@+id/questionView2" android:padding="10sp"/>
+                    android:layout_width="90dp"
+                    android:layout_height="90dp" android:id="@+id/questionView2" android:padding="10sp"/>
         </TableRow>
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageView
                     android:src="@drawable/question"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp" android:id="@+id/questionView3" android:padding="10sp"/>
+                    android:layout_width="90dp"
+                    android:layout_height="90dp" android:id="@+id/questionView3" android:padding="10sp"/>
             <ImageView
                     android:src="@drawable/question"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp" android:id="@+id/questionView4" android:padding="10sp"/>
+                    android:layout_width="90dp"
+                    android:layout_height="90dp" android:id="@+id/questionView4" android:padding="10sp"/>
         </TableRow>
     </TableLayout>
-    <Button
-            android:text="@string/ANSWER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/button_show_answer"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.498" android:layout_marginBottom="17dp"
-            app:layout_constraintBottom_toTopOf="@+id/taskNum"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

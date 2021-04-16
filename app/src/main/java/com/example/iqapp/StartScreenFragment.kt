@@ -19,7 +19,6 @@ class StartScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireActivity() as MainActivity).supportActionBar!!.show()
 
         view.findViewById<Button>(R.id.button_start).setOnClickListener {
             val bundle = bundleOf("type" to TaskViewerFragment.Type.TEST.value)

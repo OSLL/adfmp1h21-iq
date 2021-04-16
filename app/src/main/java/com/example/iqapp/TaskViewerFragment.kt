@@ -14,11 +14,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.iqapp.entities.AppState
-import com.example.iqapp.entities.AppState.maxTasks
+import com.example.iqapp.entities.Difficulty
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 
 class TaskViewerFragment : Fragment() {
@@ -33,7 +34,8 @@ class TaskViewerFragment : Fragment() {
     private val questionsViews = mutableListOf<ImageView>()
 
     private var currTask = 0
-    private var type = 1
+    private var type by Delegates.notNull<Int>()
+    private var numOfTasks by Delegates.notNull<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,64 +46,38 @@ class TaskViewerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        type = arguments?.getInt("type")!!
 
-        type = arguments?.getInt("type") ?: 1
         initImageView()
 
-        val taskNum = view.findViewById<TextView>(R.id.taskNum)
-        taskNum.text = progressString()
-
+        val taskNumTextView = view.findViewById<TextView>(R.id.text_view_task_num)
         val buttonPrevious = view.findViewById<Button>(R.id.button_previous)
         val buttonNext = view.findViewById<Button>(R.id.button_next)
         val buttonAnswer = view.findViewById<Button>(R.id.button_show_answer)
+
         buttonAnswer.visibility = View.INVISIBLE
         buttonPrevious.visibility = View.INVISIBLE
 
-        var countDownTimer: CountDownTimer? = null
         when {
             isTest() || isTrain() -> {
-                AppState.loadTasks(resources, context)
+                numOfTasks = arguments?.getInt("numOfTasks")!!
 
-                if (isTest()) {
-                    countDownTimer = object :
-                        CountDownTimer(TimeUnit.MINUTES.toMillis(AppState.timeMinutes), TimeUnit.SECONDS.toMillis(1)) {
-                        override fun onFinish() {
-                            saveAnswer()
-                            findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment)
-                        }
-
-                        override fun onTick(p0: Long) {
-                            val date = Date(p0)
-                            val formatter: DateFormat = SimpleDateFormat("mm:ss")
-                            formatter.timeZone = TimeZone.getTimeZone("UTC")
-                            val dateFormatted: String = formatter.format(date)
-                            view.findViewById<TextView>(R.id.text_view_time_left).text = dateFormatted
-                        }
-                    }
-                }
-
+                AppState.loadTasks(numOfTasks, resources, context)
+                taskNumTextView.text = progressString()
 
                 buttonPrevious.setOnClickListener {
                     saveAnswer()
-                    if (isTrain()) {
-                        setDefaultSelector()
-                        buttonAnswer.visibility = View.VISIBLE
-                    }
-
-                    decrementTask(buttonPrevious, buttonNext, taskNum)
+                    decrementTask(buttonPrevious, buttonNext, taskNumTextView)
+                    answerLogic(buttonAnswer)
                 }
 
                 buttonNext.setOnClickListener {
                     saveAnswer()
-                    if (isTrain()) {
-                        setDefaultSelector()
-                        buttonAnswer.visibility = View.VISIBLE
-                    }
-
                     incrementTask(
-                        buttonPrevious, buttonNext, taskNum,
-                        "RESULT", R.id.action_TaskViewerFragment_to_resultScreenFragment
+                        buttonPrevious, buttonNext, taskNumTextView,
+                        getString(R.string.button_result), R.id.action_TaskViewerFragment_to_resultScreenFragment
                     )
+                    answerLogic(buttonAnswer)
                 }
 
                 if (isTrain()) {
@@ -109,6 +85,7 @@ class TaskViewerFragment : Fragment() {
 
                     buttonAnswer.setOnClickListener {
                         showAnswer()
+                        AppState.shownAnswer[currTask] = true
                         buttonAnswer.visibility = View.INVISIBLE
                     }
 
@@ -118,27 +95,68 @@ class TaskViewerFragment : Fragment() {
             }
 
             isAnswer() -> {
+                numOfTasks = AppState.tasks.size
+                taskNumTextView.text = progressString()
 
                 val timer = view.findViewById<TextView>(R.id.text_view_time_left)
                 timer.visibility = View.INVISIBLE
 
                 buttonPrevious.setOnClickListener {
-                    decrementTask(buttonPrevious, buttonNext, taskNum)
+                    decrementTask(buttonPrevious, buttonNext, taskNumTextView)
                 }
 
                 buttonNext.setOnClickListener {
                     incrementTask(
-                        buttonPrevious, buttonNext, taskNum,
-                        "FINAL", R.id.action_TaskViewerFragment_to_finalFragment
+                        buttonPrevious, buttonNext, taskNumTextView,
+                        getString(R.string.button_final), R.id.action_TaskViewerFragment_to_finalFragment
                     )
                 }
             }
         }
 
         updateTask()
+        val difficulty = Difficulty.values()[arguments?.getInt("difficulty")!!]
+        createTimer(difficulty)?.start()
+    }
 
-        countDownTimer?.start()
+    private fun createTimer(difficulty: Difficulty): CountDownTimer? {
+        if (isTest()) {
+            val timeForOneTask = when (difficulty) {
+                Difficulty.EASY -> TimeUnit.MINUTES.toMillis(numOfTasks.toLong())
+                Difficulty.NORMAL -> TimeUnit.SECONDS.toMillis(40 * numOfTasks.toLong())
+                Difficulty.HARD -> TimeUnit.SECONDS.toMillis(20 * numOfTasks.toLong())
+            }
 
+            return object :
+                CountDownTimer(timeForOneTask, TimeUnit.SECONDS.toMillis(1)) {
+                override fun onFinish() {
+                    saveAnswer()
+                    findNavController().navigate(R.id.action_TaskViewerFragment_to_resultScreenFragment)
+                }
+
+                override fun onTick(p0: Long) {
+                    val date = Date(p0)
+                    val formatter: DateFormat = SimpleDateFormat("mm:ss")
+                    formatter.timeZone = TimeZone.getTimeZone("UTC")
+                    val dateFormatted: String = formatter.format(date)
+                    view?.findViewById<TextView>(R.id.text_view_time_left)?.text = dateFormatted
+                }
+            }
+        }
+
+        return null
+    }
+
+    private fun answerLogic(buttonAnswer: Button) {
+        if (isTrain()) {
+            if (AppState.shownAnswer[currTask]) {
+                showAnswer()
+                buttonAnswer.visibility = View.INVISIBLE
+            } else {
+                setDefaultSelector()
+                buttonAnswer.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun decrementTask(buttonPrevious: Button, buttonNext: Button, taskNum: TextView) {
@@ -146,7 +164,7 @@ class TaskViewerFragment : Fragment() {
             currTask--
             taskNum.text = progressString()
             updateTask()
-            buttonNext.text = "NEXT"
+            buttonNext.text = getString(R.string.button_next)
 
             if (currTask == 0) {
                 buttonPrevious.visibility = View.INVISIBLE
@@ -161,7 +179,7 @@ class TaskViewerFragment : Fragment() {
         lastNextName: String,
         actionNavigate: Int
     ) {
-        val lastIdx = maxTasks - 1
+        val lastIdx = numOfTasks - 1
 
         if (currTask != lastIdx) {
             currTask++
@@ -180,9 +198,7 @@ class TaskViewerFragment : Fragment() {
         }
     }
 
-    private fun progressString(): String {
-        return "${currTask + 1}/${maxTasks}"
-    }
+    private fun progressString() = "${currTask + 1}/${numOfTasks}"
 
     private fun updateTask() {
         for ((variantView, variant) in variantsViews.zip(AppState.tasks[currTask].variants)) {
@@ -232,17 +248,28 @@ class TaskViewerFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initImageView() {
         view?.let {
-            variantsViews.add(it.findViewById(R.id.variantView1))
-            variantsViews.add(it.findViewById(R.id.variantView2))
-            variantsViews.add(it.findViewById(R.id.variantView3))
-            variantsViews.add(it.findViewById(R.id.variantView4))
-            variantsViews.add(it.findViewById(R.id.variantView5))
-            variantsViews.add(it.findViewById(R.id.variantView6))
+            val variantsIds = listOf(
+                R.id.variantView1,
+                R.id.variantView2,
+                R.id.variantView3,
+                R.id.variantView4,
+                R.id.variantView5,
+                R.id.variantView6,
+            )
+            for (id in variantsIds) {
+                variantsViews.add(it.findViewById(id))
+            }
 
-            questionsViews.add(it.findViewById(R.id.questionView1))
-            questionsViews.add(it.findViewById(R.id.questionView2))
-            questionsViews.add(it.findViewById(R.id.questionView3))
-            questionsViews.add(it.findViewById(R.id.questionView4))
+            val questionsIds = listOf(
+                R.id.questionView1,
+                R.id.questionView2,
+                R.id.questionView3,
+                R.id.questionView4
+            )
+
+            for (id in questionsIds) {
+                questionsViews.add(it.findViewById(id))
+            }
         }
 
         for (variantView in variantsViews) {
