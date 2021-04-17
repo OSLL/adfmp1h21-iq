@@ -7,12 +7,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.iqapp.entities.Difficulty
 
+
 class TutorialFragment : Fragment() {
+    override fun onResume() {
+        super.onResume()
+        if (requireActivity() is MainActivity) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,8 +31,6 @@ class TutorialFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as MainActivity).supportActionBar!!.hide()
 
         val type = arguments?.getInt("type") ?: 1
         val tutorialTextView = view.findViewById<TextView>(R.id.text_view_tutorial)

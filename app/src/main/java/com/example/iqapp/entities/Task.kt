@@ -1,6 +1,7 @@
 package com.example.iqapp.entities
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable

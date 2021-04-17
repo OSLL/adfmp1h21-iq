@@ -85,7 +85,7 @@ class TaskViewerFragment : Fragment() {
 
                     buttonAnswer.setOnClickListener {
                         showAnswer()
-                        AppState.shownAnswer[currTask] = true
+                        AppState.shownAnswers[currTask] = true
                         buttonAnswer.visibility = View.INVISIBLE
                     }
 
@@ -149,7 +149,7 @@ class TaskViewerFragment : Fragment() {
 
     private fun answerLogic(buttonAnswer: Button) {
         if (isTrain()) {
-            if (AppState.shownAnswer[currTask]) {
+            if (AppState.shownAnswers[currTask]) {
                 showAnswer()
                 buttonAnswer.visibility = View.INVISIBLE
             } else {

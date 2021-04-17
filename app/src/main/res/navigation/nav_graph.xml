@@ -19,7 +19,11 @@
 
         <action
                 android:id="@+id/action_TutorialFragment_to_TaskViewerFragment"
-                app:destination="@id/TaskViewerFragment"/>
+                app:destination="@id/TaskViewerFragment">
+            <argument android:name="type"/>
+            <argument android:name="numOfTasks"/>
+            <argument android:name="difficulty"/>
+        </action>
         <argument android:name="type" app:argType="integer" android:defaultValue="1"/>
     </fragment>
 

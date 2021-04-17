@@ -2,11 +2,10 @@ package com.example.iqapp.entities
 
 import android.content.Context
 import android.content.res.Resources
-import kotlin.properties.Delegates
 
 object AppState {
 
-    private var numOfTasks by Delegates.notNull<Int>()
+    private var numOfTasks = 0
 
     private val _tasks = mutableListOf<Task>()
     val tasks: List<Task>
@@ -15,13 +14,13 @@ object AppState {
     lateinit var chosenAnswers: IntArray
         private set
 
-    lateinit var shownAnswer: BooleanArray
+    lateinit var shownAnswers: BooleanArray
         private set
 
     fun loadTasks(numOfTasks: Int, resources: Resources, context: Context?) {
         _tasks.clear()
         chosenAnswers = IntArray(numOfTasks) { -1 }
-        shownAnswer = BooleanArray(numOfTasks) { false }
+        shownAnswers = BooleanArray(numOfTasks) { false }
 
         val taskIds = Task.availableTaskIds().toMutableList()
         taskIds.shuffle()
