@@ -22,24 +22,3 @@ jobs:
 
       - name: Build Project
         run: ./gradlew assemble
-
-      - name: prepare gcloud
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: latest
-          service_account_email:  ${{ secrets.SA_EMAIL }}
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
-      - name: gcloud Set up project
-        run: |
-          gcloud config set project ${{ secrets.PROJECT_ID }}
-
-      - name: Assemble apks for smoke test
-        run: ./gradlew Smoke
-
-      - name: Run tests in test lab
-        run: |
-          gcloud firebase test android run \
-            --app app/build/outputs/apk/production/debug/app.apk \
-            --test app/build/outputs/apk/androidTest/production/debug/appTest.apk \
-            --device model=Nexus6P,version=28,orientation=portrait,locale=en_US \
