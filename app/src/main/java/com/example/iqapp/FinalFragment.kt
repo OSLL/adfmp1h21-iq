@@ -36,9 +36,19 @@ class FinalFragment : Fragment() {
 
         view.findViewById<Button>(R.id.button_rate).setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.plarium.raidlegends&hl=en&gl=US")))
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.plarium.raidlegends&hl=en&gl=US")
+                    )
+                )
             } catch (e: ActivityNotFoundException) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en&gl=US")))
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en&gl=US")
+                    )
+                )
             }
         }
 

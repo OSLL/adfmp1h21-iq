@@ -29,9 +29,19 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_rate -> {
                 try {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.plarium.raidlegends&hl=en&gl=US")))
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=com.plarium.raidlegends&hl=en&gl=US")
+                        )
+                    )
                 } catch (e: ActivityNotFoundException) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en&gl=US")))
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=com.plarium.raidlegends&hl=en&gl=US")
+                        )
+                    )
                 }
                 return true
             }
